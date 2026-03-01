@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>技术探索 - 个人主页</title>
+  <meta name="description" content="技术探索的个人主页 - 博客、项目、联系方式" />
+  <meta name="keywords" content="个人主页, 博客, 技术探索" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏠</text></svg>" />
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+  <!-- LXGW WenKai Font -->
+  <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-webfont@latest/style.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="home-container">
+    <main class="card" role="main">
+      <!-- 头像 -->
+      <div class="avatar-container">
+        <img src="https://www.notion.so/image/https%3A%2F%2Fprod-files-secure.s3.us-west-2.amazonaws.com%2F6bb31bb2-3a9c-49c3-afdd-be980c2f8e71%2F421b5af9-3ca0-44c3-a4c5-fac6b89a3f45%2Fnotion_avatar.png?table=collection&id=35ddfbe3-8e54-4da8-8ea9-dbce40bcabcb" alt="头像" id="avatar" />
+      </div>
+
+      <!-- 昵称 -->
+      <h1 id="nickname">技术探索</h1>
+
+      <!-- 标签/个性签名 -->
+      <p class="tagline" id="tagline">这是我记录点滴碎片感情的小窝 · 欢迎来到我的主页</p>
+
+      <!-- 导航链接 -->
+      <nav class="links" aria-label="站点导航" id="links">
+        <!-- Links will be injected by JS -->
+      </nav>
+
+      <!-- 页脚 -->
+      <footer>
+        <div class="footer-info">
+          <span>© 2021-<span id="year"></span> 技术探索</span>
+          <span class="divider">·</span>
+          <span>Powered with ❤️</span>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <!-- 暗色模式切换 -->
+  <button class="theme-toggle" id="themeToggle" title="切换深色模式" aria-label="切换深色模式">
+    <i class="fas fa-moon" id="themeIcon"></i>
+  </button>
+
+  <script src="config.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
