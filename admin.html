@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>管理后台 - 个人主页</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+    <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-webfont@latest/style.css" />
+    <link rel="stylesheet" href="admin.css" />
+</head>
+
+<body>
+    <!-- ===== 登录界面 ===== -->
+    <div id="loginView" class="login-view">
+        <div class="login-card">
+            <div class="login-icon"><i class="fas fa-lock"></i></div>
+            <h2>管理后台</h2>
+            <p class="login-desc">请输入管理员密码</p>
+            <form id="loginForm" autocomplete="off">
+                <div class="input-group">
+                    <i class="fas fa-key"></i>
+                    <input type="password" id="passwordInput" placeholder="管理员密码" required />
+                </div>
+                <button type="submit" class="btn btn-primary" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> 登录
+                </button>
+                <p class="error-msg" id="loginError"></p>
+            </form>
+            <a href="/" class="back-link"><i class="fas fa-arrow-left"></i> 返回主页</a>
+        </div>
+    </div>
+
+    <!-- ===== 管理面板 ===== -->
+    <div id="adminView" class="admin-view" style="display:none;">
+        <header class="admin-header">
+            <div class="header-left">
+                <i class="fas fa-cog"></i>
+                <h1>站点管理</h1>
+            </div>
+            <div class="header-right">
+                <a href="/" class="btn btn-sm" target="_blank"><i class="fas fa-external-link-alt"></i> 查看主页</a>
+                <button class="btn btn-sm btn-danger" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出</button>
+            </div>
+        </header>
+
+        <main class="admin-main">
+            <!-- 个人信息 -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-user-circle"></i> 个人信息</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <label>头像 URL</label>
+                        <div class="avatar-input-group">
+                            <img id="avatarPreview" class="avatar-preview" src="" alt="头像预览" />
+                            <input type="text" id="inputAvatar" placeholder="粘贴头像图片链接..." />
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <label>昵称</label>
+                        <input type="text" id="inputNickname" placeholder="你的昵称" />
+                    </div>
+                    <div class="form-row">
+                        <label>个性签名</label>
+                        <input type="text" id="inputTagline" placeholder="你的个性签名" />
+                    </div>
+                    <div class="form-row">
+                        <label>建站年份</label>
+                        <input type="number" id="inputSince" placeholder="例如 2021" />
+                    </div>
+                </div>
+            </section>
+
+            <!-- 导航链接 -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-link"></i> 导航链接</h2>
+                    <button class="btn btn-sm btn-primary" id="addLinkBtn"><i class="fas fa-plus"></i> 添加</button>
+                </div>
+                <div class="panel-body">
+                    <div class="links-hint">
+                        <i class="fas fa-info-circle"></i>
+                        图标类名可在 <a href="https://fontawesome.com/icons" target="_blank">Font Awesome</a> 网站查找，例如
+                        <code>fas fa-blog</code>
+                    </div>
+                    <div id="linksContainer">
+                        <!-- JS 动态渲染 -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 备案信息 -->
+            <section class="panel">
+                <div class="panel-header">
+                    <h2><i class="fas fa-shield-alt"></i> 备案信息</h2>
+                </div>
+                <div class="panel-body">
+                    <div class="form-row">
+                        <label>ICP 备案号</label>
+                        <input type="text" id="inputIcp" placeholder="例如：京ICP备XXXXXXXX号" />
+                    </div>
+                    <div class="form-row">
+                        <label>公安备案号</label>
+                        <input type="text" id="inputGongan" placeholder="例如：京公网安备 XXXXXXXXXXX 号" />
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部保存栏 -->
+        <div class="save-bar">
+            <span class="save-status" id="saveStatus"></span>
+            <button class="btn btn-primary btn-save" id="saveBtn">
+                <i class="fas fa-save"></i> 保存所有更改
+            </button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

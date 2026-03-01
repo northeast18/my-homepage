@@ -1,33 +1,52 @@
 /**
  * 个人主页 - 应用逻辑
- * 读取 config.js 中的 CONFIG 对象，渲染页面
+ * 优先从 /api/config 读取配置（Cloudflare KV）
+ * 如果 API 不可用，则使用 config.js 中的默认值
  */
 
 ; (function () {
     'use strict'
 
+    // ===== 获取配置（API 优先，config.js 兜底） =====
+    async function getConfig() {
+        try {
+            const res = await fetch('/api/config')
+            if (res.ok) {
+                const data = await res.json()
+                // 如果 API 返回了有效数据（至少有 nickname）
+                if (data && data.nickname) return data
+            }
+        } catch (e) {
+            // API 不可用（本地开发时）
+        }
+        // 兜底：使用 config.js 的静态配置
+        return typeof CONFIG !== 'undefined' ? CONFIG : {}
+    }
+
     // ===== 渲染个人信息 =====
-    function renderProfile() {
+    function renderProfile(config) {
         const avatar = document.getElementById('avatar')
         const nickname = document.getElementById('nickname')
         const tagline = document.getElementById('tagline')
 
-        if (CONFIG.avatar) avatar.src = CONFIG.avatar
-        if (CONFIG.nickname) {
-            nickname.textContent = CONFIG.nickname
-            document.title = `${CONFIG.nickname} - 个人主页`
+        if (config.avatar) avatar.src = config.avatar
+        if (config.nickname) {
+            nickname.textContent = config.nickname
+            document.title = `${config.nickname} - 个人主页`
         }
-        if (CONFIG.tagline) {
-            tagline.textContent = `${CONFIG.tagline} · 欢迎来到我的主页`
+        if (config.tagline) {
+            tagline.textContent = `${config.tagline} · 欢迎来到我的主页`
         }
     }
 
     // ===== 渲染导航链接 =====
-    function renderLinks() {
+    function renderLinks(config) {
         const container = document.getElementById('links')
-        if (!CONFIG.links || CONFIG.links.length === 0) return
+        if (!config.links || config.links.length === 0) return
 
-        CONFIG.links.forEach((item, index) => {
+        container.innerHTML = '' // 清空可能的旧内容
+
+        config.links.forEach((item, index) => {
             const a = document.createElement('a')
             a.className = 'link'
             a.href = item.link
@@ -41,39 +60,46 @@
     }
 
     // ===== 渲染页脚 =====
-    function renderFooter() {
+    function renderFooter(config) {
         document.getElementById('year').textContent = new Date().getFullYear()
 
         const footerInfo = document.querySelector('.footer-info')
         if (!footerInfo) return
 
-        // 动态添加备案信息
-        const { icp, gongan } = CONFIG.footer || {}
-        if (gongan || icp) {
-            // 清空默认内容重建
-            footerInfo.innerHTML = ''
+        const { icp, gongan } = config.footer || {}
 
-            if (gongan) {
-                const span = document.createElement('span')
-                span.textContent = gongan
-                footerInfo.appendChild(span)
-                addDivider(footerInfo)
-            }
+        // 重建页脚内容
+        footerInfo.innerHTML = ''
 
-            if (icp) {
-                const a = document.createElement('a')
-                a.href = 'https://beian.miit.gov.cn/'
-                a.target = '_blank'
-                a.rel = 'noopener noreferrer'
-                a.textContent = icp
-                footerInfo.appendChild(a)
-                addDivider(footerInfo)
-            }
-
-            const copy = document.createElement('span')
-            copy.innerHTML = `© ${CONFIG.since || 2021}-${new Date().getFullYear()} ${CONFIG.nickname}`
-            footerInfo.appendChild(copy)
+        if (gongan) {
+            const span = document.createElement('span')
+            span.textContent = gongan
+            footerInfo.appendChild(span)
+            addDivider(footerInfo)
         }
+
+        if (icp) {
+            const a = document.createElement('a')
+            a.href = 'https://beian.miit.gov.cn/'
+            a.target = '_blank'
+            a.rel = 'noopener noreferrer'
+            a.textContent = icp
+            footerInfo.appendChild(a)
+            addDivider(footerInfo)
+        }
+
+        const copy = document.createElement('span')
+        copy.innerHTML = `© ${config.since || 2021}-${new Date().getFullYear()} ${config.nickname || ''}`
+        footerInfo.appendChild(copy)
+
+        const d2 = document.createElement('span')
+        d2.className = 'divider'
+        d2.textContent = '·'
+        footerInfo.appendChild(d2)
+
+        const powered = document.createElement('span')
+        powered.innerHTML = 'Powered with ❤️'
+        footerInfo.appendChild(powered)
     }
 
     function addDivider(parent) {
@@ -88,7 +114,6 @@
         const toggle = document.getElementById('themeToggle')
         const icon = document.getElementById('themeIcon')
 
-        // 检查本地存储或系统偏好
         const stored = localStorage.getItem('theme')
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
         const isDark = stored ? stored === 'dark' : prefersDark
@@ -102,7 +127,6 @@
             localStorage.setItem('theme', next ? 'dark' : 'light')
         })
 
-        // 监听系统主题变化
         window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
             if (!localStorage.getItem('theme')) {
                 applyTheme(e.matches)
@@ -116,10 +140,12 @@
     }
 
     // ===== 初始化 =====
-    document.addEventListener('DOMContentLoaded', () => {
-        renderProfile()
-        renderLinks()
-        renderFooter()
+    document.addEventListener('DOMContentLoaded', async () => {
         initTheme()
+
+        const config = await getConfig()
+        renderProfile(config)
+        renderLinks(config)
+        renderFooter(config)
     })
 })()
