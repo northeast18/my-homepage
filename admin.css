@@ -364,7 +364,7 @@ body {
 
 .link-item {
     display: grid;
-    grid-template-columns: 140px 1fr 1fr 40px;
+    grid-template-columns: 160px 1fr 1.5fr 110px;
     gap: 8px;
     align-items: center;
     padding: 10px 0;
@@ -376,7 +376,20 @@ body {
     border-bottom: none;
 }
 
+.icon-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.icon-input-wrap i {
+    width: 20px;
+    text-align: center;
+    color: var(--text-muted);
+}
+
 .link-item input {
+    width: 100%;
     padding: 8px 10px;
     border: 1px solid var(--input-border);
     border-radius: 6px;
@@ -396,9 +409,14 @@ body {
     color: #9ca3af;
 }
 
-.link-delete {
-    width: 32px;
-    height: 32px;
+.link-actions {
+    display: flex;
+    gap: 4px;
+}
+
+.link-actions button {
+    width: 30px;
+    height: 30px;
     border-radius: 6px;
     border: none;
     background: transparent;
@@ -411,7 +429,12 @@ body {
     transition: all 0.2s;
 }
 
-.link-delete:hover {
+.link-actions button:hover {
+    background: #f3f4f6;
+    color: var(--text);
+}
+
+.link-actions .link-delete:hover {
     background: #fef2f2;
     color: var(--danger);
 }
@@ -485,11 +508,11 @@ body {
         gap: 6px;
     }
 
-    .link-item input:first-child {
+    .icon-input-wrap {
         grid-column: 1 / -1;
     }
 
-    .link-delete {
+    .link-actions {
         grid-column: 2;
         justify-self: end;
     }

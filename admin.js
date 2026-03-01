@@ -156,17 +156,45 @@
         div.className = 'link-item'
         div.dataset.index = index
         div.innerHTML = `
-      <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="图标类名" data-field="icon" />
+      <div class="icon-input-wrap">
+        <i class="${escapeHtml(link.icon || 'fas fa-link')}" data-preview="icon"></i>
+        <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="图标类名" data-field="icon" list="iconOptions" />
+      </div>
       <input type="text" value="${escapeHtml(link.name || '')}" placeholder="显示名称" data-field="name" />
       <input type="text" value="${escapeHtml(link.link || '')}" placeholder="链接地址" data-field="link" />
-      <button class="link-delete" title="删除"><i class="fas fa-trash-alt"></i></button>
+      <div class="link-actions">
+        <button class="link-move-up" title="上移" type="button"><i class="fas fa-arrow-up"></i></button>
+        <button class="link-move-down" title="下移" type="button"><i class="fas fa-arrow-down"></i></button>
+        <button class="link-delete" title="删除" type="button"><i class="fas fa-trash-alt"></i></button>
+      </div>
     `
+
+        // 绑定图标预览事件
+        const iconInput = div.querySelector('input[data-field="icon"]')
+        const iconPreview = div.querySelector('i[data-preview="icon"]')
+        iconInput.addEventListener('input', (e) => {
+            iconPreview.className = e.target.value.trim() || 'fas fa-link'
+        })
 
         // 删除按钮
         div.querySelector('.link-delete').addEventListener('click', () => {
             div.style.opacity = '0'
             div.style.transform = 'translateX(20px)'
             setTimeout(() => div.remove(), 200)
+        })
+
+        // 上移按钮
+        div.querySelector('.link-move-up').addEventListener('click', () => {
+            if (div.previousElementSibling) {
+                div.parentNode.insertBefore(div, div.previousElementSibling)
+            }
+        })
+
+        // 下移按钮
+        div.querySelector('.link-move-down').addEventListener('click', () => {
+            if (div.nextElementSibling) {
+                div.parentNode.insertBefore(div.nextElementSibling, div)
+            }
         })
 
         return div
