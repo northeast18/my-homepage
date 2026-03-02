@@ -157,8 +157,8 @@
         div.dataset.index = index
         div.innerHTML = `
       <div class="icon-input-wrap">
-        <i class="${escapeHtml(link.icon || 'fas fa-link')}" data-preview="icon"></i>
-        <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="图标类名" data-field="icon" list="iconOptions" />
+        <span class="icon-preview" data-preview="icon"></span>
+        <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="粘贴 SVG 或 图标类名" data-field="icon" list="iconOptions" />
       </div>
       <input type="text" value="${escapeHtml(link.name || '')}" placeholder="显示名称" data-field="name" />
       <input type="text" value="${escapeHtml(link.link || '')}" placeholder="链接地址" data-field="link" />
@@ -171,9 +171,34 @@
 
         // 绑定图标预览事件
         const iconInput = div.querySelector('input[data-field="icon"]')
-        const iconPreview = div.querySelector('i[data-preview="icon"]')
+        const iconPreview = div.querySelector('.icon-preview')
+
+        const updatePreview = (val) => {
+            if (!val) {
+                iconPreview.innerHTML = '<i class="fas fa-link"></i>';
+                return;
+            }
+            if (val.startsWith('<svg')) {
+                iconPreview.innerHTML = val;
+                const svg = iconPreview.querySelector('svg');
+                if (svg) {
+                    svg.style.width = '100%';
+                    svg.style.height = '100%';
+                    if (!val.includes('fill=')) {
+                        svg.style.fill = 'currentColor';
+                    }
+                }
+            } else if (val.startsWith('http') || val.startsWith('data:image')) {
+                iconPreview.innerHTML = `<img src="${val}" alt="icon">`;
+            } else {
+                iconPreview.innerHTML = `<i class="${escapeHtml(val)}"></i>`;
+            }
+        };
+
+        updatePreview(iconInput.value.trim());
+
         iconInput.addEventListener('input', (e) => {
-            iconPreview.className = e.target.value.trim() || 'fas fa-link'
+            updatePreview(e.target.value.trim());
         })
 
         // 删除按钮

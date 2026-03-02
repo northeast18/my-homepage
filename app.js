@@ -54,7 +54,23 @@
             a.rel = 'noopener noreferrer'
             a.title = item.name
             a.style.setProperty('--link-index', index + 1)
-            a.innerHTML = `<i class="${item.icon}"></i><span>${item.name}</span>`
+
+            const iconStr = (item.icon || '').trim()
+            let iconHTML = ''
+            if (iconStr.startsWith('<svg')) {
+                // 如果是纯色 SVG 没有自带颜色设置，则注入 currentColor 支持主题切换
+                let svgStr = iconStr
+                if (!iconStr.includes('fill=')) {
+                    svgStr = iconStr.replace('<svg', '<svg fill="currentColor"')
+                }
+                iconHTML = `<span class="link-icon">${svgStr}</span>`
+            } else if (iconStr.startsWith('http') || iconStr.startsWith('data:image')) {
+                iconHTML = `<span class="link-icon"><img src="${iconStr}" alt="icon"/></span>`
+            } else {
+                iconHTML = `<i class="${iconStr} link-icon"></i>`
+            }
+
+            a.innerHTML = `${iconHTML}<span>${item.name}</span>`
             container.appendChild(a)
         })
     }

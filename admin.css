@@ -382,10 +382,21 @@ body {
     gap: 8px;
 }
 
-.icon-input-wrap i {
-    width: 20px;
-    text-align: center;
+.icon-preview {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--text-muted);
+    flex-shrink: 0;
+}
+
+.icon-preview svg,
+.icon-preview img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
 }
 
 .link-item input {
