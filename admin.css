@@ -394,9 +394,42 @@ body {
 
 .icon-preview svg,
 .icon-preview img {
-    max-width: 100%;
-    max-height: 100%;
+    width: 1.2em;
+    height: 1.2em;
     object-fit: contain;
+    display: block;
+}
+
+/* 上传按钮 */
+.upload-btn {
+    padding: 8px 12px;
+    border: 1px solid var(--border);
+    background: var(--card-bg);
+    color: var(--text-muted);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 13px;
+    transition: all 0.2s;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.upload-btn:hover {
+    color: var(--primary);
+    border-color: var(--primary);
+    background: #eff6ff;
+}
+
+.upload-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* 隐藏文件选择器 */
+.file-upload-input {
+    display: none;
 }
 
 .link-item input {
@@ -515,7 +548,7 @@ body {
     }
 
     .link-item {
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr auto;
         gap: 6px;
     }
 

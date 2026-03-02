@@ -32,6 +32,80 @@
     // 当前编辑的配置
     let currentConfig = null
 
+    // ===== 极简本地图片压缩上传 (转 Base64) =====
+    const imageUploadInput = document.getElementById('imageUploadInput')
+    let currentUploadCallback = null
+
+    imageUploadInput.addEventListener('change', async (e) => {
+        const file = e.target.files[0]
+        if (!file) return
+
+        // 重置 input，允许重复上传同一文件
+        imageUploadInput.value = ''
+
+        try {
+            const base64 = await compressImage(file, 200) // 图标/头像不需要太大，200px足够
+            if (currentUploadCallback) {
+                currentUploadCallback(base64)
+            }
+        } catch (err) {
+            alert('图片处理失败: ' + err.message)
+        }
+    })
+
+    function triggerUpload(callback) {
+        currentUploadCallback = callback
+        imageUploadInput.click()
+    }
+
+    function compressImage(file, maxSize) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader()
+            reader.onload = (e) => {
+                const img = new Image()
+                img.onload = () => {
+                    let width = img.width
+                    let height = img.height
+
+                    if (width > height) {
+                        if (width > maxSize) {
+                            height = Math.round((height *= maxSize / width))
+                            width = maxSize
+                        }
+                    } else {
+                        if (height > maxSize) {
+                            width = Math.round((width *= maxSize / height))
+                            height = maxSize
+                        }
+                    }
+
+                    const canvas = document.createElement('canvas')
+                    canvas.width = width
+                    canvas.height = height
+                    const ctx = canvas.getContext('2d')
+                    ctx.drawImage(img, 0, 0, width, height)
+
+                    // 压缩为 webp 格式降低体积
+                    const dataUrl = canvas.toDataURL('image/webp', 0.8)
+                    resolve(dataUrl)
+                }
+                img.onerror = () => reject(new Error('无法读取图片'))
+                img.src = e.target.result
+            }
+            reader.onerror = () => reject(new Error('读取文件失败'))
+            reader.readAsDataURL(file)
+        })
+    }
+
+    // 头像上传按钮
+    document.getElementById('uploadAvatarBtn').addEventListener('click', () => {
+        triggerUpload((base64) => {
+            inputAvatar.value = base64
+            // 触发 input 事件以更新预览
+            inputAvatar.dispatchEvent(new Event('input'))
+        })
+    })
+
     // ===== 初始化 =====
     document.addEventListener('DOMContentLoaded', async () => {
         if (authToken) {
@@ -158,7 +232,8 @@
         div.innerHTML = `
       <div class="icon-input-wrap">
         <span class="icon-preview" data-preview="icon"></span>
-        <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="粘贴 SVG 或 图标类名" data-field="icon" list="iconOptions" />
+        <input type="text" value="${escapeHtml(link.icon || '')}" placeholder="粘贴 SVG 或是 类名" data-field="icon" list="iconOptions" />
+        <button type="button" class="upload-btn link-upload-btn" title="上传图片"><i class="fas fa-upload"></i></button>
       </div>
       <input type="text" value="${escapeHtml(link.name || '')}" placeholder="显示名称" data-field="name" />
       <input type="text" value="${escapeHtml(link.link || '')}" placeholder="链接地址" data-field="link" />
@@ -199,6 +274,14 @@
 
         iconInput.addEventListener('input', (e) => {
             updatePreview(e.target.value.trim());
+        })
+
+        // 图片图标上传按钮
+        div.querySelector('.link-upload-btn').addEventListener('click', () => {
+            triggerUpload((base64) => {
+                iconInput.value = base64
+                iconInput.dispatchEvent(new Event('input'))
+            })
         })
 
         // 删除按钮

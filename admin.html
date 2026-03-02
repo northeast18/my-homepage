@@ -10,7 +10,7 @@
         href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
     <link rel="stylesheet" href="https://npm.elemecdn.com/lxgw-wenkai-webfont@latest/style.css" />
-    <link rel="stylesheet" href="admin.css?v=1.2" />
+    <link rel="stylesheet" href="admin.css?v=1.3" />
 </head>
 
 <body>
@@ -58,7 +58,10 @@
                         <label>头像 URL</label>
                         <div class="avatar-input-group">
                             <img id="avatarPreview" class="avatar-preview" src="" alt="头像预览" />
-                            <input type="text" id="inputAvatar" placeholder="粘贴头像图片链接..." />
+                            <input type="text" id="inputAvatar" placeholder="粘贴头像图片链接或点击右侧上传..." />
+                            <button type="button" class="upload-btn" id="uploadAvatarBtn">
+                                <i class="fas fa-upload"></i> 上传
+                            </button>
                         </div>
                     </div>
                     <div class="form-row">
@@ -85,11 +88,11 @@
                 <div class="panel-body">
                     <div class="links-hint">
                         <i class="fas fa-info-circle"></i>
-                        支持 3 种图标格式：<br>
-                        1. 🥇 <b>SVG 代码</b>（强烈推荐！可以直接去免费的 <a href="https://www.iconfont.cn/"
-                            target="_blank">IconFont</a> 网站找到喜欢的图标，点击“<b>复制 SVG 代码</b>”然后粘贴进来）<br>
-                        2. 🖼️ <b>图片链接</b>（直接填写 <code>https://...png</code> 格式的图片链接）<br>
-                        3. ✒️ <b>类名</b>（下拉选择，或输入 <code>fas fa-blog</code>）
+                        图标支持 3 种格式：<br>
+                        1. 🥇 <b>最近上传</b>（点击右侧 <i class="fas fa-upload"></i> 按钮直接上传图片作为图标）<br>
+                        2. 🥈 <b>SVG 代码</b>（去免费的 <a href="https://www.iconfont.cn/" target="_blank">IconFont</a>
+                        网站找到喜欢的图标，点击“<b>复制 SVG 代码</b>”然后粘贴进来）<br>
+                        3. 🥉 <b>图标类名</b>（下拉选择，或输入 <code>fas fa-blog</code>）
                     </div>
                     <datalist id="iconOptions">
                         <option value="fas fa-blog">博客</option>
@@ -136,8 +139,11 @@
         </div>
     </div>
 
-    <script src="config.js?v=1.2"></script>
-    <script src="admin.js?v=1.2"></script>
+    <!-- 隐藏的文件上传组件 -->
+    <input type="file" id="imageUploadInput" class="file-upload-input" accept="image/*" />
+
+    <script src="config.js?v=1.3"></script>
+    <script src="admin.js?v=1.3"></script>
 </body>
 
 </html>
