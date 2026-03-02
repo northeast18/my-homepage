@@ -401,11 +401,12 @@ body {
 }
 
 /* 针对部分过于纤细的 SVG 增加描边以统一视觉厚度 */
-.icon-preview svg {
-    stroke: currentColor;
-    stroke-width: 1.5px;
-    stroke-linejoin: round;
-    stroke-linecap: round;
+.icon-preview svg,
+.icon-preview svg * {
+    stroke: currentColor !important;
+    stroke-width: 1.5px !important;
+    stroke-linejoin: round !important;
+    stroke-linecap: round !important;
 }
 
 /* 上传按钮 */

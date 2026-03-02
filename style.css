@@ -181,11 +181,12 @@ h1 {
 }
 
 /* 针对部分过于纤细的 SVG 增加描边以统一视觉厚度 */
-.link .link-icon svg {
-  stroke: currentColor;
-  stroke-width: 1.5px;
-  stroke-linejoin: round;
-  stroke-linecap: round;
+.link .link-icon svg,
+.link .link-icon svg * {
+  stroke: currentColor !important;
+  stroke-width: 1.5px !important;
+  stroke-linejoin: round !important;
+  stroke-linecap: round !important;
 }
 
 .link:hover {
