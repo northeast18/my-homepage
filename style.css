@@ -174,10 +174,18 @@ h1 {
 
 .link .link-icon svg,
 .link .link-icon img {
-  width: 1em;
-  height: 1em;
+  width: 1.1em;
+  height: 1.1em;
   object-fit: contain;
   display: block;
+}
+
+/* 针对部分过于纤细的 SVG 增加描边以统一视觉厚度 */
+.link .link-icon svg {
+  stroke: currentColor;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
 }
 
 .link:hover {
